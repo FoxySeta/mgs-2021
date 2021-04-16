@@ -1,25 +1,8 @@
-{-
+-- exercises-02-tuesday.agda
 
-Exercises for TYP at MGS 2021
+-- Try to prove the following propositions.
+-- Warning: not all of them may be provable!
 
-Tuesday
-
-Try to prove the following propositions.
-Warning: not all of them may be provable!
-
-C-c C-l load
-\<=> ⇔
-\and ∧
-...
-\neg ¬
-
-In the shed.
-C- C-, see goal and givens
-C-c C-, like C-c C-. but also shows the type of your partial solution.
-C-c C-SPC  check solution, and remove shed
-C-c C-r    refine, use function or do lambdas
-C-c C-c    pattern matching (if you give a parameter) or copatternmatching (no par).
--}
 open import mylib
 
 p1 : P ⇔ P ∧ P

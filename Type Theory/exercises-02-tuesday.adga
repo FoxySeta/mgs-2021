@@ -1,0 +1,58 @@
+{-
+
+Exercises for TYP at MGS 2021
+
+Tuesday
+
+Try to prove the following propositions.
+Warning: not all of them may be provable!
+
+C-c C-l load
+\<=> ⇔
+\and ∧
+...
+\neg ¬
+
+In the shed.
+C- C-, see goal and givens
+C-c C-, like C-c C-. but also shows the type of your partial solution.
+C-c C-SPC  check solution, and remove shed
+C-c C-r    refine, use function or do lambdas
+C-c C-c    pattern matching (if you give a parameter) or copatternmatching (no par).
+-}
+open import mylib
+
+p1 : P ⇔ P ∧ P
+--p1 = ((λ x → (x , x)) , λ {(x , _ ) → x} )
+proj₁ p1 x = x , x
+proj₂ p1 (x , _) = x
+
+p2 : P ∨ ¬ P ⇒ (¬ (P ∧ Q) ⇔ ¬ P ∨ ¬ Q)
+proj₁ (p2 (inj₁ p)) h = inj₂ (λ q → h (p , q))
+proj₁ (p2 (inj₂ np)) h = inj₁ np
+proj₂ (p2 tnd) (inj₁ np) (p , q) = np p
+proj₂ (p2 tnd) (inj₂ nq) (p , q) = nq q
+
+p3 : ¬ (P ∧ ¬ P)
+p3 (p , np) = np p
+--p3 h = proj₂ h {!!}
+
+p4 : ¬ (P ⇔ ¬ P)
+p4 (pnp , npp) = pnp (npp (λ p → pnp p p)) (npp (λ p → pnp p p))
+
+p5 : ¬ ¬ (P ∨ ¬ P)
+p5 a = a (inj₂ (λ x → a (inj₁ x) ) )
+
+p6 : ¬ P ⇔ ¬ ¬ ¬ P
+proj₁ p6 not-p = λ not-not-p → not-not-p not-p
+proj₂ p6 not-not-not-p = λ p → not-not-not-p (λ not-p → not-p p)
+
+p7 : (¬ ¬ P ⇒ P) ⇒ (P ∨ ¬ P)
+p7 = {!!} -- is not provable
+
+p7' : ({P : prop} → ¬ ¬ P ⇒ P) → {P : prop} → P ∨ ¬ P
+p7' raa = raa p5
+
+p8 : (P ∨ ¬ P) ⇒ ¬ ¬ P ⇒ P
+p8 (inj₁ p) not-not-p = p 
+p8 (inj₂ not-p) not-not-p = case⊥ (not-not-p not-p)

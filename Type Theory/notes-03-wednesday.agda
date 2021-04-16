@@ -1,14 +1,13 @@
+-- notes-03-wednesday.agda
+
 open import mylib
 
 {-
-classical vs intuitionistic logic 
-
-we assume that each proposition is either true or false
-
-excluded middle, tertium non datur (the third is not given)
-
-to prove P, assume not P and derive a contradiction
-indirect proof, reduction ad absurdum, reduction to the absurd
+  Classical vs intuitionistic logic 
+  In classical logica, we assume that each proposition is either true or false.
+  Excluded middle, tertium non datur (the third is not given).
+  To prove P, assume not P and derive a contradiction: indirect proof, reduction
+  ad absurdum, reduction to the absurd.
 
 -}
 
@@ -39,13 +38,11 @@ nntnd h = h (inj₂ (λ p → h (inj₁ p)))
 raa→tnd : ({P : prop} → RAA P) → {Q : prop} → TND Q
 raa→tnd raa = raa nntnd
 
-----
-
 {-
-datatypes, infinite types
-ℕ - natural numbers, Peano 
-every natural number is either 0 or a successor of a number.
-Peano arithmetic
+  Datatypes, infinite types
+  ℕ - natural numbers, Peano 
+  Every natural number is either 0 or a successor of a number.
+  Peano arithmetic.
 -}
 
 data ℕ : Set where
@@ -64,14 +61,11 @@ fifteen : ℕ
 fifteen = 15
 
 infixl 2 _+_
-_+_ : ℕ → ℕ → ℕ
+_+_ : ℕ → ℕ → ℕ -- structural recursive definition 
 zero + n = n
 suc m + n = suc (m + n)
 
--- structural recursive definition 
-
 infixl 4 _*_
-
 _*_ : ℕ → ℕ → ℕ
 zero * n = 0
 suc m * n = m * n + n
@@ -82,8 +76,7 @@ data List (A : Set) : Set where
 
 -- ℕ = List ⊤
 
--- append
-_++_ : List A → List A → List A
+_++_ : List A → List A → List A -- append
 [] ++ ys = ys
 (x ∷ xs) ++ ys = x ∷ (xs ++ ys)
 
@@ -115,9 +108,11 @@ data Ord : Set where
 data Reynolds : Set where
   inn : ((Reynolds → Bool) → Bool) → Reynolds
 
--- inconsistent with classical logic
--- it doesn't adhere to the intuinistic explanation of inductive
--- datatypes. Hence we reject types like this.
--- strictly positive = recursive type only appears on the
--- right of an arrow type.
--- strictly positive = container / polynomial functors.
+{-
+  Inconsistent with classical logic
+  It doesn't adhere to the intuitionistic explanation of inductive datatypes.
+  Hence we reject types like this.
+  - strictly positive = recursive type only appears on the right of an arrow
+    type.
+  - strictly positive = container / polynomial functors.
+-}

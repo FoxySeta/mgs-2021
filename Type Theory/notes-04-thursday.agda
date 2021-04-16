@@ -1,18 +1,19 @@
+-- notes-04-thursday.agda
+
 open import mylib
 
 {-
-infinite datastructure
+  Infinite datastructure
+  - streams, Stream A
+  0 ,1 , 2 ,3 ,4, ... : Stream ℕ
+  1, 1 , 2, 3 ,5 ,..
+  2, 3, 5, 7, 11,..
 
-- streams, Stream A
-0 ,1 , 2 ,3 ,4, ... : Stream ℕ
-1, 1 , 2, 3 ,5 ,..
-2, 3, 5, 7, 11,..
+  duality, categorical mirror
+  _×_ (products) and _⊎_ (coproducts, sums)
 
-duality, categorical mirror
-_×_ (products) and _⊎_ (coproducts, sums)
-
-inductive datatypes: finite datastructures
-coinductive datatypes: Streams, ℕ∞ (conatural numbers)
+  Inductive datatypes: finite datastructures
+  Coinductive datatypes: Streams, ℕ∞ (conatural numbers)
 -}
 
 record Stream (A : Set) : Set where
@@ -25,9 +26,9 @@ record Stream (A : Set) : Set where
 open Stream
 
 {-
-_∷S_ : A → Stream A → Stream A
-head (a ∷S as) = a
-tail (a ∷S as) = as
+  _∷S_ : A → Stream A → Stream A
+  head (a ∷S as) = a
+  tail (a ∷S as) = as
 -}
 
 from : ℕ → Stream ℕ
@@ -41,13 +42,12 @@ head (mapS f as) = f (head as)
 tail (mapS f as) = mapS f (tail as)
 
 {-
-filterS : (A → Bool) → Stream A → Stream A
-head (filterS f as) = if f (head as) then (head as) else {!!}
-tail (filterS f as) = {!!}
--- no guarded definition of filter
+  filterS : (A → Bool) → Stream A → Stream A
+  head (filterS f as) = if f (head as) then (head as) else {!!}
+  tail (filterS f as) = {!!} -- no guarded definition of filter
 -}
 
-{- conatural numbers -}
+-- Conatural numbers
 
 data Maybe (A : Set) : Set where
   nothing : Maybe A
@@ -85,9 +85,9 @@ pred∞ (suc∞ n) = just n
 pred∞ ∞ = just ∞
 
 {-
-_+_ : ℕ → ℕ → ℕ
-zero + n = n
-suc m + n = suc (m + n)
+  _+_ : ℕ → ℕ → ℕ
+  zero + n = n
+  suc m + n = suc (m + n)
 -}
 
 _+∞_ : ℕ∞ → ℕ∞ → ℕ∞
@@ -95,36 +95,32 @@ pred∞ (m +∞ n) with pred∞ m
 ... | nothing = pred∞ n
 ... | just m' = just (m' +∞ n)
 
--------
-
 {-
-dependent types (families)
+  Dependent types (families)
+  A dependent type is a function whose codomain is Set.
+  List : Set → Set
+  Not proper?
 
-is a function whose codomain is Set.
-List : Set → Set
-not proper?
+  Vec : Set → ℕ → Set
+  Vec A n = tuple of n as
+  { as | length as = n} -- type theoretic of comprehension
 
-Vec : Set → ℕ → Set
-Vec A n = tuple of n as
-{ as | length as = n} -- type theoretic of comprehension
+  Fin : ℕ → Set
+  Fin n = a set with n elements
+  {0 , 1, .. , n-1}
 
-Fin : ℕ → Set
-Fin n = a set with n elements
-{0 , 1, .. , n-1}
+  Function type
+  A B : Set 
+  A → B : Set
 
-function type
-A B : Set 
----------
-A → B : Set
+  Dependent function type (Π-type)
+  A : Set
+  B : A → Set
 
-dependent function type (Π-type)
-A : Set
-B : A → Set
----------------
-(x : A) → B x
-{x : A} → B x -- hidden arguments
+  (x : A) → B x
+  {x : A} → B x -- hidden arguments
 
-zeros : (n : ℕ) → Vec ℕ n
+  zeros : (n : ℕ) → Vec ℕ n
 
 -}
 
@@ -151,17 +147,12 @@ data Fin : ℕ → Set where
   suc : {n : ℕ} → Fin n → Fin (suc n)
 
 {-
-Fin 0 = {}
-Fin 1 = { zero{0} }
-Fin 2 = { zero{1} , suc{1} (zero{0}) }
-...
+  Fin 0 = {}
+  Fin 1 = { zero{0} }
+  Fin 2 = { zero{1} , suc{1} (zero{0}) }
+  ...
 -}
 
--- safe lookup function
-
-_!!_ : {n : ℕ} → Vec A n → Fin n → A
+_!!_ : {n : ℕ} → Vec A n → Fin n → A -- safe lookup function
 (a ∷ as) !! zero = a
 (a ∷ as) !! suc n = as !! n
-
-
-

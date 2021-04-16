@@ -1,31 +1,25 @@
-{-
-
-Exercises for TYP at MGS 2021
-
-Thursday
--}
+-- exercises-04-thursday.agda
 
 open import mylib
 
-{- 1. Coinduction -}
+-- 1. Coinduction
 
+{-
+  Now your task is to define multiplication _*∞_ for conatural numbers.
 
-{- Now your task is to define multiplication _*∞_ for conatural numbers.
+  This is harder then it sounds. Why? Because to check termination of
+  corecursive programs agda needs to make sure that if you want to find out a
+  finite amout of information about the result of the function it only needs a
+  finite amount of information about its inputs. Such a function is called
+  productive. And agda isn't very clever in figuring this out, it has to be
+  obvious from the program (similar as structural recursion has to be
+  obviously structural). 
+  You should *not* use the TERMINATING pragma in your solution.
+  But it may be useful for experiments.
 
-This is harder then it sounds. Why? Because to check termination of corecursive programs 
-agda needs to make sure that if you want to find out a finite amout of information about
-the result of the function it only needs a finite amount of information about its inputs. 
-Such a function is called productive. And agda isn't very clever in figuring this out, it
-has to be obvious from the program (similar as structural recursion has to be obviously 
-structural). 
-
-You should *not* use the TERMINATING pragma in your solution.
-But it may be useful for experiments.
-
-_*_ : ℕ → ℕ → ℕ
-zero * n = zero
-suc m * n = n + m * n
-
+  _*_ : ℕ → ℕ → ℕ
+  zero * n = zero
+  suc m * n = n + m * n
 -}
 
 {-
@@ -52,6 +46,7 @@ pred∞ (m *∞ n) with pred∞ m
 ...           | nothing = nothing
 ...           | just n' = just (n' +∞ (m' *∞ n))
 -}
+
 {-
 with pred∞ m
 ...| nothing = zero∞
@@ -61,57 +56,47 @@ with pred∞ m
 -}
 
 -- pred∞ (∞ *∞ zero∞) = nothing
-{- Here are some testing tools -}
+-- here are some testing tools
 ℕ→ℕ∞ : ℕ → ℕ∞
 ℕ→ℕ∞ zero = zero∞
 ℕ→ℕ∞ (suc n) = suc∞ (ℕ→ℕ∞ n)
 
 {-# TERMINATING #-} -- a lie
-{- this function is a cheat - it doesn't terminate for ∞ -}
+-- this function is a cheat - it doesn't terminate for ∞
 ℕ∞→ℕ : ℕ∞ → ℕ
 ℕ∞→ℕ n with pred∞ n
 ℕ∞→ℕ n | nothing = 0
 ℕ∞→ℕ n | just n' = suc (ℕ∞→ℕ n')
 
-{- My unit-test -}
+-- My unit-test
 x3*5 = ℕ∞→ℕ (ℕ→ℕ∞ 3 *∞ ℕ→ℕ∞ 5)
-{- 15 -}
 
-{- 2. Dependent types  Fin -}
+-- 2. Dependent types  Fin
 
-{- define the following operations on Fin
-
-- max returns the largest element in Fin (suc n)
-- emb embeds Fin n into Fin (suc n) without changing its values
-- inv inverts the order of elements in Fin n
+{-
+  Define the following operations on Fin
+  - max returns the largest element in Fin (suc n)
+  - emb embeds Fin n into Fin (suc n) without changing its values
+  - inv inverts the order of elements in Fin n
 -}
 
 max : (n : ℕ) → Fin (suc n)
 max zero = zero
 max (suc n) = suc (max n)
-{- max 3 = suc (suc (suc zero)) : Fin 4 -}
 
 emb : {n : ℕ} → Fin n → Fin (suc n)
 emb zero = zero
 emb (suc m) = suc (emb m)
-{- emb (suc zero) = suc {2} (zero {1}) -}
 
 inv : {n : ℕ} → Fin n → Fin n
 inv zero = max _
 inv (suc i) = emb (inv i)
-{- 0 1 2 3 
-   3 2 1 0
--}
-{- inv {4} (suc zero) = suc (suc zero) -}
 
-{- 2. Dependent types : Vec -}
-
-{- we define vectors and matrices of natural numbers -}
+-- 2. Dependent types : Vec
 
 Vector : ℕ → Set {- Vec n is an n-dimensional vector -}
 Vector m = Vec ℕ m
 
-{- A matrix is a vector of vectors. -}
 Matrix : ℕ → ℕ → Set {- Matrix m n is an m x n Matrix -}
 Matrix m n = Vec (Vector n) m
 
@@ -127,7 +112,7 @@ m4 = (1 ∷ 2 ∷ [])
     ∷ (7 ∷ 8 ∷ []) 
     ∷ []
 
-{- Define the operation transpose which switches columns and rows. -}
+-- Define the operation transpose which switches columns and rows.
 -- Applicative functor, Vec _ n is an applicative functor
 -- mapVec : (A → B) → Vec A n → Vec B n
 -- return : A → Vec A n
@@ -156,18 +141,6 @@ transpose (ns ∷ mns) = {!transpose mns!}
 
 test8 : Matrix 2 3
 test8 = transpose m4
-{-
-(1 ∷ 4 ∷ 7 ∷ []) ∷ 
-(2 ∷ 5 ∷ 8 ∷ []) ∷ []
--}
 
 test9 : Matrix 3 3
 test9 = transpose m3
-{-
-(1 ∷ 4 ∷ 7 ∷ []) ∷ 
-(2 ∷ 5 ∷ 8 ∷ []) ∷ 
-(3 ∷ 6 ∷ 9 ∷ []) ∷ []
--}
-
-
-

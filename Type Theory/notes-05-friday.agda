@@ -1,3 +1,5 @@
+-- notes-05-friday.agda
+
 open import mylib
 
 -- Π-types = dependent function types
@@ -21,17 +23,15 @@ syntax Σ A (λ x → P)  = Σ[ x ∈ A ] P
 List' : Set → Set
 List' A = Σ[ n ∈ ℕ ] Vec A n
 
--- ex: show that this isomorphic to lists
-
-List'' : Set → Set
+List'' : Set → Set -- ex: show that this is isomorphic to lists
 List'' A = Σ[ n ∈ ℕ ] Fin n → A
 
 {-
-container repr of lists
-set of shapes S = ℕ
-family of positions P : ℕ → Set, P = Fin
-all strictly positive types can be represented as containers
-( ~ polynomial functors)
+  Container representation of lists.
+  Set of shapes S = ℕ.
+  Family of positions P : ℕ → Set, P = Fin.
+  All strictly positive types can be represented as containers ( ~ polynomial
+  functors) !
 -}
 
 {-
@@ -45,20 +45,15 @@ A ⊎' B = Σ[ b ∈ Bool ] F b
                F true = A
                F false = B
 
--- ex show that this equivalent to ⊎
-
-_×'_ : Set → Set → Set
+_×'_ : Set → Set → Set -- exercise: show that this equivalent to ⊎
 A ×' B = Π[ b ∈ Bool ] F b
          where F : Bool → Set
                F true = A
                F false = B
 
-----
-
 {-
-PaT for predicate logic
-P : A → prop
-= dependent type
+  "Propositions as types": for predicate logic
+  P : A → prop = dependent type
 -}
 
 All : (A : Set)(P : A → prop) → prop
@@ -78,15 +73,12 @@ taut : (∀[ x ∈ A ] PP x ⇒ Q) ⇔ (∃[ x ∈ A ] PP x) ⇒ Q
 proj₁ taut f (a , pa) = f a pa
 proj₂ taut g a pa = g (a , pa)
 
---
-
 data _≡_ : A → A → prop where
   refl : {a : A} → a ≡ a
 
 infix 4 _≡_
 
--- inductive definition of equality
-{- _≡_ is an equivalence relation -}
+-- inductive definition of equality: _≡_ is an equivalence relation
 
 sym : (a b : A) → a ≡ b → b ≡ a
 sym a .a refl = refl
@@ -98,7 +90,7 @@ cong : {a b : A}(f : A → B) → a ≡ b → f a ≡ f b
 cong f refl = refl
 
 {-
-proving that + is associative
+  Proving that + is associative
 
 _+_ : ℕ → ℕ → ℕ
 zero + n = n
@@ -109,9 +101,7 @@ assoc : (i j k : ℕ) → (i + j) + k ≡ i + (j + k)
 assoc zero j k = refl
 assoc (suc i) j k = cong suc (assoc i j k)
 
-{-
-proof by induction = pattern matching + recursion
--}
+-- proof by induction = pattern matching + recursion
 
 ind : (P : ℕ → Set)
     → P 0
@@ -120,15 +110,13 @@ ind : (P : ℕ → Set)
 ind P z s zero = z
 ind P z s (suc n) = s n (ind P z s n)
 
-{-
-eliminator for ℕ = induction/dependent recursion
--}
+-- eliminator for ℕ = induction/dependent recursion
 
 {-
 data _≡_ : A → A → prop where
   refl : {a : A} → a ≡ a
 
-what is ind for equality
+  What is ind for equality?
 -}
 
 ind≡ : (P : (a b : A) → a ≡ b → prop)
@@ -136,17 +124,16 @@ ind≡ : (P : (a b : A) → a ≡ b → prop)
        → (a b : A)(p : a ≡ b) → P a b p
 ind≡ P r a .a refl = r a
 
--- ex derive sym, trans, cong from ind≡
--- ind≡ = J
+-- Ex. derive sym, trans, cong from ind≡ (= J)
 
 uip : (a b : A)(p q : a ≡ b) → p ≡ q
 uip = ind≡ (λ a b p → (q : a ≡ b) → p ≡ q) λ a q →
            {!!}
-  
 --uip refl refl = refl
--- is uip derivable from J ?
--- Hofmann & Streicher: groupoid model of type theory
--- restricted version of HoTT (infinity groupoid model of TT)
--- observed: version of univalence in this theory,
--- Voevodsky formulated HoTT, supports full univalence.
 
+{-
+  Is uip derivable from J ? Hofmann & Streicher: groupoid model of type theory.
+  Restricted version of HoTT (infinity groupoid model of TT); observed: version
+  of univalence in this theory. Voevodsky formulated HoTT, which supports full
+  univalence.
+-}

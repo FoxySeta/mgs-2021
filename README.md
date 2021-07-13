@@ -1,2 +1,3 @@
-# mgs-2021
-Exercices for Midlands Graduate School in the Foundations of Computing Science 2021
+# Midlands Graduate School 2021
+Exercises for Midlands Graduate School (MGS) in the Foundations of Computing
+Science (2021).

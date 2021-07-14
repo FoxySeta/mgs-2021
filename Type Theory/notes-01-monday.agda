@@ -17,7 +17,7 @@ n : ℕ
 n = 3
 
 f' : ℕ → ℕ
-f' = λ x → x + 2 -- nameless function
+f' = λ x → x + 2 -- λ function (nameless function)
 
 {-
     f' 3 =
@@ -42,7 +42,7 @@ k h = h 2 + h 3
 -}
 
 variable
-  A B C : Set -- polymorphic
+  A B C : Set -- polymorphic: Set actually means "type"
 
 id : A → A
 id x = x
@@ -50,7 +50,11 @@ id x = x
 _∘_ : (B → C) → (A → B) → (A → C)
 f ∘ g = λ x → f (g x)
 
-K : A → B → A -- combinator
+{-
+  A combinator is a high-order function that uses only function application and
+  other combinators.
+-}
+K : A → B → A
 K x y = x
 
 S : (A → B → C) → (A → B) → A → C

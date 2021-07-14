@@ -7,14 +7,14 @@
 open import Agda.Primitive
 
 {-
-Two inductive implementations of the
-  Martin-Löf identity type
-aka
-  equality type
-aka
-  identification type
-aka
-  path type.
+  Two inductive implementations of the
+    Martin-Löf identity type
+  aka
+    equality type
+  aka
+    identification type
+  aka
+    path type.
 -}
 
 data _≡_ {A : Set} (a : A) : A → Set where
@@ -87,11 +87,10 @@ test2 q = refl
 test3 : {a c : A} → (q : a ≡ c) → trans3 refl q ≡ q
 test3 refl = refl
 
-{- In test3 above, we have to pattern match (path induct) on q!
-   What if we cannot, as in
-
-  test4 : {a : A} → (q : a ≡ a) → trans3 refl q ≡ q
-
+{-
+  In test3 above, we have to pattern match (path induct) on q!
+  What if we cannot, as in
+    test4 : {a : A} → (q : a ≡ a) → trans3 refl q ≡ q
   ?
 -}
 
@@ -138,15 +137,15 @@ _×_ : (A B : Set) → Set
 A × B = Σ A (λ _ → B)
 
 {-
-Exercise 5
-For a given function f : A -> B, a *pointwise left inverse* is a
-function g : B -> A such that (a : A) -> g (f a) = a.
+  Exercise 5
+  For a given function f : A -> B, a *pointwise left inverse* is a
+  function g : B -> A such that (a : A) -> g (f a) = a.
 
-Show: If f has a pointwise left inverse then, for all a,b : A, the
-function ap_f {a} {b} has a pointwise left inverse. (Does the other
-direction hold as well?)
+  Show: If f has a pointwise left inverse then, for all a,b : A, the
+  function ap_f {a} {b} has a pointwise left inverse. (Does the other
+  direction hold as well?)
 
-Solution of the easy part:
+  Solution of the easy part:
 -}
 
 has-ptw-left-inv : {A B : Set} → (f : A → B) → Set
@@ -176,11 +175,8 @@ module _ (A B : Set) (g : B → A) (a b : B) where
   wrong : (pair1 pair2 : Σ A λ x → g a ≡ g b) → pair1 ≡ pair2
   wrong (x1 , p1) (x2 , p2) = {!p1!}
 
-
-
 split-equality : {x y : A × B} → x ≡ y → (fst x ≡ fst y) × (snd x ≡ snd y)
 split-equality = {!!}
 
 combine-equalities : {x y : A × B} → (fst x ≡ fst y) × (snd x ≡ snd y) → x ≡ y
 combine-equalities = {!!}
-
